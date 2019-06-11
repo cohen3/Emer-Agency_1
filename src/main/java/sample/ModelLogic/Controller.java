@@ -18,10 +18,11 @@ public class Controller {
 
     public Controller(String path)
     {
-        this.dbHandler = new DBHandler();
-        this.dbHandler.connectDB(path);
+        dbHandler = new DBHandler();
+        dbHandler.connectDB(path);
         Pair p = new Pair(Fields.status, "admin");
         ArrayList<Pair> a = new ArrayList<>();
+        a.add(p);
         ArrayList<HashMap<String, String>> results = ReadEntries(a,Tables.Users);
         User admin;
         if(results.size() < 1) admin = new User("1", "10", "0", "admin", "EladC", "1234");
@@ -47,8 +48,4 @@ public class Controller {
     public RESULT UpdateEntries(Tables table, Fields fieldToUpdate, String newValue, ArrayList<Pair> fieldsNvalues){return dbHandler.UpdateEntries(table,fieldToUpdate,newValue,fieldsNvalues);}
     public RESULT DeleteEntry (Tables table, ArrayList<Pair> fieldValues){return dbHandler.DeleteEntry(table,fieldValues);}
 
-    private void initiateData()
-    {
-
-    }
 }
