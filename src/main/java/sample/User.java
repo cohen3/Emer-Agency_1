@@ -1,12 +1,14 @@
+package sample;
+
 public class User {
-    int ID;
-    int Rank;
-    int Warning;
+    String ID;
+    String Rank;
+    String Warning;
     String Status;
     String UserName;
     String Password;
 
-    public User(int ID, int rank, int warning, String status, String userName, String password) {
+    public User(String ID, String rank, String warning, String status, String userName, String password) {
         this.ID = ID;
         Rank = rank;
         Warning = warning;
@@ -15,15 +17,15 @@ public class User {
         Password = password;
     }
 
-    public void setID(int ID) {
+    public void setID(String ID) {
         this.ID = ID;
     }
 
-    public void setRank(int rank) {
+    public void setRank(String rank) {
         Rank = rank;
     }
 
-    public void setWarning(int warning) {
+    public void setWarning(String warning) {
         Warning = warning;
     }
 
@@ -39,15 +41,15 @@ public class User {
         Password = password;
     }
 
-    public int getID() {
+    public String getID() {
         return ID;
     }
 
-    public int getRank() {
+    public String getRank() {
         return Rank;
     }
 
-    public int getWarning() {
+    public String getWarning() {
         return Warning;
     }
 

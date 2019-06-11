@@ -1,10 +1,12 @@
+package sample;
+
 import java.util.HashMap;
 import java.util.HashSet;
 
 public class Organization {
 
     User admin;
-    HashMap<Integer, User> users;
+    HashMap<String, User> users;
     HashSet<Event> events;
 
     public Organization(User admin) {

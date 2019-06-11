@@ -9,7 +9,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class AccessLayer {
+public class DBHandler {
 
     private Connection connection;
 
@@ -172,30 +172,62 @@ public class AccessLayer {
         }
     }
 
-    //    DDL FOR ListingVacation TABLE:
-//    CREATE TABLE ListingVacation (
-//            VacID         INT (16)    PRIMARY KEY,
-//    airline       STRING (24),
-//    FlightDate    STRING (16) NOT NULL,
-//    Price         INT(8) NOT NULL,
-//    ReturnDate    STRING (16),
-//    Baggage       STRING (16),
-//    adultTickets  INT (10),
-//    childTickets  INT (10),
-//    babyTickets   INT (10),
-//    destination   STRING (24) NOT NULL,
-//    includeReturn BOOLEAN     NOT NULL,
-//    vacationType  STRING (24),
-//    includeRoom   BOOLEAN,
-//    placeRank     INT (3),
-//    SellerID                  REFERENCES users (userName) ON DELETE CASCADE
-//    ON UPDATE CASCADE,
-//    Connection    BOOLEAN
-//);
+    /*
+    tables: Users - simple user talbe
+            UserUpdates - all updates posted by a user
+            Events - every event posted
+     */
 
-    // ADD RECORD TO ListingVacation query
-//     INSERT INTO ListingVacation (VacID, airline, FlightDate, ReturnDate, Baggage, adultTickets, childTickets, babyTickets, destination, includeReturn, vacationType, includeRoom, placeRank)
-//          VALUES (4,"Air1", "1/1/2091", "1/1/2092", "Hand", 5, 2, 2, "HAIFA", true, "idk", 1, 3);
-//         INSERT INTO ListingVacation (VacID, airline, FlightDate, ReturnDate, Baggage, adultTickets, childTickets, babyTickets, destination, includeReturn, vacationType, includeRoom, placeRank)
-//          VALUES (4,\"Air1\", \"1/1/2091\", \"1/1/2092\", \"Hand\", 5, 2, 2, \"HAIFA\", true, \"idk\", 1, 3);
+    /*
+    DDL for UserUpdates:
+
+    CREATE TABLE UserUpdates (
+    userID      STRING (0, 20)  REFERENCES Users (userID)
+                                NOT NULL,
+    eventID     STRING (0, 20)  REFERENCES Events (eventID)
+                                NOT NULL,
+    information STRING (0, 100),
+    date        TEXT            NOT NULL,
+    PRIMARY KEY (
+        userID,
+        eventID,
+        date
+    ),
+    UNIQUE (
+        userID,
+        eventID,
+        date
+    )
+);
+
+    */
+    /*
+    DDL for Users:
+
+    CREATE TABLE Users (
+    userID   STRING (0, 10) PRIMARY KEY,
+    fname    STRING (0, 20),
+    lname    STRING (0, 20),
+    Username STRING (0, 20) UNIQUE
+                            NOT NULL,
+    password STRING (0, 20) NOT NULL,
+    status   STRING (0, 20),
+    rank     INTEGER,
+    warning  STRING (0, 20)
+    );
+    */
+    /*
+    DDL for Events:
+
+    CREATE TABLE Events (
+    userID      STRING (0, 20)  REFERENCES Users (userID) NOT NULL,
+    eventID     String (0, 20)  NOT NULL,
+    category    STRING (0, 20)  NOT NULL,
+    information STRING (0, 100),
+    status      String(0, 20)   NOT NULL,
+    date        TEXT            NOT NULL,
+    PRIMARY KEY  (userID, eventID),
+    UNIQUE (userID, eventID)
+    );
+    */
 }

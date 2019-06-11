@@ -1,4 +1,9 @@
+package sample;
+
 import javafx.util.Pair;
+import sample.Enums.Fields;
+import sample.Enums.RESULT;
+import sample.Enums.Tables;
 
 import java.sql.*;
 import java.util.ArrayList;

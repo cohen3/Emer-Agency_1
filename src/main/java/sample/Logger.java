@@ -1,3 +1,5 @@
+package sample;
+
 public class Logger {
     private static Logger ourInstance = new Logger();
 

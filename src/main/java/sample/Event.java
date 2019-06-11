@@ -1,18 +1,20 @@
+package sample;
+
 import java.util.LinkedList;
 
 public class Event {
     String date;
     String header;
     String Status;
-    int user_ID;
+    String operator;
     LinkedList<Update> updates;
     LinkedList<User> securityPerson;
 
-    public Event(String date, String header, String status, int user_ID) {
+    public Event(String date, String header, String status, String operator) {
         this.date = date;
         this.header = header;
         Status = status;
-        this.user_ID = user_ID;
+        this.operator = operator;
         updates = new LinkedList<>();
         securityPerson = new LinkedList<>();
     }
@@ -49,7 +51,7 @@ public class Event {
         return Status;
     }
 
-    public int getUser_ID() {
-        return user_ID;
+    public String getUser_ID() {
+        return operator;
     }
 }

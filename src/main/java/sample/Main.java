@@ -1,12 +1,19 @@
 package sample;
 
 import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.stage.Stage;
+import sample.ModelLogic.Controller;
 
 import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class Main extends Application {
     // a boolean variable to enable various in code debug
@@ -15,30 +22,33 @@ public class Main extends Application {
     //TODO: modify this method to run our new window (this is a garbage code but can use it as a reference)
     @Override
     public void start(Stage primaryStage) throws Exception{
-//        Controller control=new Controller();
-//        Model m = new Model("Database/EmerAgencyDB.db");
-//        control.setModel(m);
-//        FXMLLoader fxmlLoader = new FXMLLoader();
-//        Parent root = fxmlLoader.load(getClass().getResource("../SearchPage.fxml").openStream());
-//        primaryStage.setTitle("Emer-Agency");
-//        Scene scene = new Scene(root, 1000, 780);
+        MainWindowView control=new MainWindowView();
+        Controller m = new Controller("Database/EmerAgencyDB.db");
+        control.setModel(m);
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        Parent root = fxmlLoader.load(getClass().getResource("../MainWindow.fxml").openStream());
+        primaryStage.setTitle("Emer-Agency");
+        Scene scene = new Scene(root, 1000, 780);
 //        scene.getStylesheets().add(getClass().getResource("../style.css").toExternalForm());
-//        primaryStage.setScene(scene);
-//        SearchPageView searchPageView = fxmlLoader.getController();     //getting the controller for the FXML
-//        searchPageView.setControl(control);
-//        control.setModel(new Model("Database/EmerAgencyDB.db"));//setting a Model for it
-//        searchPageView.setRecommendedListings();
+        primaryStage.setScene(scene);
+        control.setModel(new Controller("Database/EmerAgencyDB.db"));//setting a Controller for it
 //        primaryStage.setOnCloseRequest((WindowEvent event1) -> {
-//            searchPageView.exit();
+//            control.exit();
 //        });
-//        primaryStage.show();
+        primaryStage.show();
+
+
     }
 
 
     public static void main(String[] args) {
         //ValidateDatabase("Database/EmerAgencyDB.db");
         //TODO: when app is opening, read database and build the data structures
-        launch(args);
+        //launch(args);
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        Date date = new Date();
+        System.out.println(dateFormat.format(date)); //2016/11/16 12:08:43
+        Controller c = new Controller("Database/EmerAgencyDB.db");
     }
 
     /**
