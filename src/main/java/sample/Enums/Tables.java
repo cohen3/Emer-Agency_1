@@ -1,3 +1,5 @@
 package sample.Enums;
 
-public enum Tables {Users,Transactions,ListingVacation,PurchaseRequest,PayPal}
+public enum Tables {
+    //TODO: fill here with database's tables
+}

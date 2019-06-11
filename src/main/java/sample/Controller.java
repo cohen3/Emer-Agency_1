@@ -1,3 +1,7 @@
+package sample;
+
+import sample.ModelLogic.Model;
+
 public class Controller {
     // Usecases we will implement:
     //
@@ -5,8 +9,9 @@ public class Controller {
     // 2) UC2: view update history
     // 3) UC3: publish an event
 
-    public static void main(String[] args) {
-        Controller c = new Controller();
+    Model m;
 
+    public void setModel(Model m) {
+        this.m = m;
     }
 }
