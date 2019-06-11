@@ -1,8 +1,15 @@
 package sample;
 
-import java.util.LinkedList;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
+
 
 public class Event {
+    String eventID;
     String date;
     String header;
     String Status;
@@ -10,7 +17,8 @@ public class Event {
     LinkedList<Update> updates;
     LinkedList<User> securityPerson;
 
-    public Event(String date, String header, String status, String operator) {
+    public Event(String eventID,String date, String header, String status, String operator) {
+        this.eventID = eventID;
         this.date = date;
         this.header = header;
         Status = status;
@@ -28,6 +36,9 @@ public class Event {
     {
         updates.addLast(u);
     }
+
+    public void addUpdates(LinkedList<Update> u)
+    {updates=u;}
 
     public LinkedList<Update> getAllUpdates()
     {
@@ -54,4 +65,28 @@ public class Event {
     public String getUser_ID() {
         return operator;
     }
+
+    public LinkedList<Update> getSortedUpdates() {
+        LinkedList<Update> u =updates;
+        String new1 = u.get(0).date;
+        DateFormat format = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.ENGLISH);
+        Date date = null;
+        try {
+            date = format.parse(new1);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        u.sort(new Comparator<Update>() {
+            @Override
+            public int compare(Update u1, Update u2) {
+                return u2.getDate().compareTo(u1.getDate());
+            }
+        });
+        Collections.reverse(u);
+        return u;
+    }
+
+
+
 }

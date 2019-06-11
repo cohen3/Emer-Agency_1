@@ -27,4 +27,9 @@ public class Update {
     public void Edit(String information) {
         Information = information;
     }
+
+    @Override
+    public String toString() {
+        return String.format("information = " +Information+ ", date = " + date);
+    }
 }

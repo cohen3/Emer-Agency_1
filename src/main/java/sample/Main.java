@@ -5,6 +5,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.util.Pair;
+import sample.Enums.Fields;
+import sample.Enums.Tables;
 import sample.ModelLogic.Controller;
 
 import java.io.File;
@@ -13,7 +16,10 @@ import java.sql.DriverManager;
 import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedList;
 
 public class Main extends Application {
     // a boolean variable to enable various in code debug
@@ -45,10 +51,32 @@ public class Main extends Application {
         //ValidateDatabase("Database/EmerAgencyDB.db");
         //TODO: when app is opening, read database and build the data structures
         //launch(args);
-        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-        Date date = new Date();
-        System.out.println(dateFormat.format(date)); //2016/11/16 12:08:43
+       // DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+       // Date date = new Date();
+      //  System.out.println(dateFormat.format(date)); //2016/11/16 12:08:43
         Controller c = new Controller("Database/EmerAgencyDB.db");
+        ArrayList<Pair> p = new ArrayList<>();
+        Pair a = new Pair(Fields.userID, "EladC");
+        p.add(a);
+        ArrayList<HashMap<String, String>> results = c.ReadEntries(p, Tables.Events);
+        HashMap<String, String> h1=results.get(0);
+        Event e = new Event(h1.get("eventID"),h1.get("date"),h1.get("information"),h1.get("status"),h1.get("userID"));
+        LinkedList<Update> arr = new LinkedList<>();
+        p.clear();
+        a = new Pair(Fields.eventID,e.eventID);
+        p.add(a);
+        ArrayList<HashMap<String, String>> results2 = c.ReadEntries(p, Tables.UserUpdates);
+        for (HashMap<String, String> x:results2) {
+            Update d = new Update(x.get("information"),x.get("date"));
+            arr.add(d);
+        }
+        e.addUpdates(arr);
+
+        LinkedList<Update> pr = e.getSortedUpdates();
+        System.out.println(pr);
+
+
+
     }
 
     /**

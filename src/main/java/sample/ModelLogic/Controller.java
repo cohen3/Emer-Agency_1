@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Controller {
-    private DBHandler dbHandler =null;
+    public static DBHandler dbHandler =null;
     private Organization organization;
     private HashMap<String, Event> events;
 
