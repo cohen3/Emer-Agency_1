@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 import sample.Enums.Fields;
@@ -28,19 +29,30 @@ public class Main extends Application {
     //TODO: modify this method to run our new window (this is a garbage code but can use it as a reference)
     @Override
     public void start(Stage primaryStage) throws Exception{
-        MainWindowView control=new MainWindowView();
-        Controller m = new Controller("Database/EmerAgencyDB.db");
-        control.setModel(m);
         FXMLLoader fxmlLoader = new FXMLLoader();
-        Parent root = fxmlLoader.load(getClass().getResource("../MainWindow.fxml").openStream());
-        primaryStage.setTitle("Emer-Agency");
+        Parent root = fxmlLoader.load(this.getClass().getResource("MainWindow.fxml").openStream());
+        MainWindowView mwv = fxmlLoader.getController();
+        primaryStage.setTitle("DRE Project");
         Scene scene = new Scene(root, 1000, 780);
-//        scene.getStylesheets().add(getClass().getResource("../style.css").toExternalForm());
         primaryStage.setScene(scene);
-        control.setModel(new Controller("Database/EmerAgencyDB.db"));//setting a Controller for it
+//        primaryStage.getIcons().add(new Image(this.getClass().getResourceAsStream("icon.png")));
+        primaryStage.setResizable(true);
+//        primaryStage.show();
+
+
+//        MainWindowView control=new MainWindowView();
+        Controller m = new Controller("Database/EmerAgencyDB.db");
+        mwv.setModel(m);
+//        FXMLLoader fxmlLoader = new FXMLLoader();
+//        Parent root = fxmlLoader.load(getClass().getResource("../MainWindow.fxml").openStream());
+//        primaryStage.setTitle("Emer-Agency");
+//        scene.getStylesheets().add(getClass().getResource("../style.css").toExternalForm());
+//        primaryStage.setScene(scene);
+//        control.setModel(new Controller("Database/EmerAgencyDB.db"));//setting a Controller for it
 //        primaryStage.setOnCloseRequest((WindowEvent event1) -> {
 //            control.exit();
 //        });
+
         primaryStage.show();
 
 
@@ -50,7 +62,7 @@ public class Main extends Application {
     public static void main(String[] args) {
         //ValidateDatabase("Database/EmerAgencyDB.db");
         //TODO: when app is opening, read database and build the data structures
-        //launch(args);
+        launch(args);
        // DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
        // Date date = new Date();
       //  System.out.println(dateFormat.format(date)); //2016/11/16 12:08:43
