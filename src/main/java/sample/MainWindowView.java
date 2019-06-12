@@ -148,11 +148,11 @@ public class MainWindowView implements Initializable {
     }
 
     public void updateEvent(ActionEvent actionEvent) {
-        m.AddUpdate(eventIDtoUpdate.getSelectionModel().getSelectedItem().toString(),newUpdateInformation.getText(),currentUsername);
+        m.AddUpdate(currentUsername, eventIDtoUpdate.getSelectionModel().getSelectedItem().toString(),newUpdateInformation.getText());
     }
 
     public void createEvent(ActionEvent actionEvent) {
-//        m.AddEvent(eventIDtoUpdate.getSelectionModel().getSelectedItem().toString(),newUpdateInformation.getText(),currentUsername,CategoriesCreate);
+        m.AddEvent(currentUsername, TitleCreate.getText(),CategoriesCreate.getCheckModel().getItem(0),"in progress",FirstUpdateCreate.getText());
 
     }
 }

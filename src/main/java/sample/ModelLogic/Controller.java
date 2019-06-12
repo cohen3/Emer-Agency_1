@@ -9,13 +9,16 @@ import sample.Organization;
 import sample.Update;
 import sample.User;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Controller {
     public static DBHandler dbHandler = null;
     private Organization organization;
-    private HashMap<String, Event> events;
+//    private HashMap<String, Event> events;
+    private static DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
 
     public Controller(String path) {
         dbHandler = new DBHandler();
@@ -58,64 +61,64 @@ public class Controller {
 
     public RESULT login(String username, String password) {
         ArrayList<Pair> l = new ArrayList<>();
-        l.add(new Pair("UserID",username));
-        l.add(new Pair("password",password));
+        l.add(new Pair("UserID", username));
+        l.add(new Pair("password", password));
 
-        return (dbHandler.ReadEntries(l,Tables.Users).size()==1)?RESULT.Success:RESULT.Fail;
+
+        return (dbHandler.ReadEntries(l, Tables.Users).size() == 1) ? RESULT.Success : RESULT.Fail;
     }
 
     public RESULT checkMokdan(String username) {
         ArrayList<Pair> l = new ArrayList<>();
-        l.add(new Pair("UserID",username));
-        l.add(new Pair("job","mokdan"));
+        l.add(new Pair("UserID", username));
+        l.add(new Pair("job", "mokdan"));
 
 //        return (dbHandler.ReadEntries(l,Tables.Users).size()==1)?RESULT.Success:RESULT.Fail;
         return RESULT.Success;
     }
 
-    public ArrayList<Update> getEventUpdates(String event_name)
-    {
+    public ArrayList<Update> getEventUpdates(String event_name) {
         ArrayList<Pair> l = new ArrayList<>();
-        l.add(new Pair("eventID",event_name));
-        ArrayList<Update> updates =  new ArrayList<>();
-        for (HashMap<String, String> element : dbHandler.ReadEntries(l,Tables.UserUpdates))
-        {
-            Update update = new Update(element.get("information"),element.get("date"));
+        l.add(new Pair("eventID", event_name));
+        ArrayList<Update> updates = new ArrayList<>();
+        for (HashMap<String, String> element : dbHandler.ReadEntries(l, Tables.UserUpdates)) {
+            Update update = new Update(element.get("information"), element.get("date"));
             updates.add(update);
         }
         return updates;
     }
-    public ArrayList<Event> getEvents()
-    {
+
+    public ArrayList<Event> getEvents() {
         ArrayList<Pair> l = new ArrayList<>();
-        ArrayList<Event> events =  new ArrayList<>();
-        for (HashMap<String, String> element : dbHandler.ReadEntries(l,Tables.Events))
-        {
-            Event event = new Event(element.get("eventID"),element.get("date"),element.get("information"),element.get("status"),element.get("userID"));
+        ArrayList<Event> events = new ArrayList<>();
+        for (HashMap<String, String> element : dbHandler.ReadEntries(l, Tables.Events)) {
+            Event event = new Event(element.get("eventID"), element.get("date"), element.get("information"), element.get("status"), element.get("userID"));
             events.add(event);
         }
         return events;
     }
 
-    public RESULT AddUpdate(String eventID,String information, String userID) {
+    public RESULT AddUpdate(String userID, String eventID, String information) {
 //        date=
         ArrayList<Pair> l = new ArrayList<>();
-        l.add(new Pair("eventID",eventID));
-        l.add(new Pair("inforamtion",information));
-        l.add(new Pair("userID",userID));
+        l.add(new Pair("eventID", eventID));
+        l.add(new Pair("information", information));
+        l.add(new Pair("userID", userID));
+        l.add(new Pair("date", dtf.format(LocalDateTime.now())));
 
         return dbHandler.AddEntry(l, Tables.UserUpdates);
     }
 
-    public RESULT AddEvent(String eventID,String information, String userID, String category, String status) {
+    public RESULT AddEvent(String userID, String eventID, String category, String information, String status) {
 //        date=
         ArrayList<Pair> l = new ArrayList<>();
-        l.add(new Pair("eventID",eventID));
-        l.add(new Pair("inforamtion",information));
-        l.add(new Pair("userID",userID));
-        l.add(new Pair("category",category));
-        l.add(new Pair("status",status));
+        l.add(new Pair("eventID", eventID));
+        l.add(new Pair("information", information));
+        l.add(new Pair("userID", userID));
+        l.add(new Pair("category", category));
+        l.add(new Pair("status", status));
+        l.add(new Pair("date", dtf.format(LocalDateTime.now())));
 
-        return dbHandler.AddEntry(l, Tables.UserUpdates);
+        return dbHandler.AddEntry(l, Tables.Events);
     }
 }
