@@ -3,14 +3,12 @@ package sample;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.util.Pair;
 import org.controlsfx.control.CheckListView;
 import sample.Enums.RESULT;
 import sample.ModelLogic.*;
@@ -155,6 +153,21 @@ public class MainWindowView implements Initializable {
 
     public void createEvent(ActionEvent actionEvent) {
         m.AddEvent(currentUsername, TitleCreate.getText(),CategoriesCreate.getCheckModel().getItem(0),"in progress",FirstUpdateCreate.getText());
+        updateEvenetsOnShow();
+    }
 
+    private void updateEvenetsOnShow(){
+        ArrayList<Event> events = m.getEvents();
+
+        if (tableViewEvents != null) {
+            if (tableViewEvents.getItems() != null) tableViewEvents.getItems().clear();
+            tableViewEvents.getItems().addAll(events);
+        }
+        if (eventIDtoUpdate != null) {
+            if (eventIDtoUpdate.getItems() != null)
+                eventIDtoUpdate.getItems().clear();
+            for (Event event : events)
+                eventIDtoUpdate.getItems().add(event.eventID);
+        }
     }
 }

@@ -29,10 +29,10 @@ public class Main extends Application {
         Parent root = fxmlLoader.load(this.getClass().getResource("MainWindow.fxml").openStream());
         MainWindowView mwv = fxmlLoader.getController();
         primaryStage.setTitle("DRE Project");
-        Scene scene = new Scene(root, 1000, 780);
+        Scene scene = new Scene(root, 600, 400);
+        primaryStage.setResizable(false);
         primaryStage.setScene(scene);
 //        primaryStage.getIcons().add(new Image(this.getClass().getResourceAsStream("icon.png")));
-        primaryStage.setResizable(true);
 //        primaryStage.show();
 
 
