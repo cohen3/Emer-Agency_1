@@ -47,6 +47,8 @@ public class MainWindowView implements Initializable {
     // 2) UC2: view update history
     // 3) UC3: publish an event
 
+    User logged = null;
+
     Controller m;
 //    @FXML
 //    Button btn;
