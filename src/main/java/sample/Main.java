@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 import sample.Enums.Fields;
@@ -32,7 +33,7 @@ public class Main extends Application {
         Scene scene = new Scene(root, 600, 400);
         primaryStage.setResizable(false);
         primaryStage.setScene(scene);
-//        primaryStage.getIcons().add(new Image(this.getClass().getResourceAsStream("icon.png")));
+        primaryStage.getIcons().add(new Image(this.getClass().getResourceAsStream("logo.jpeg")));
 //        primaryStage.show();
 
 
