@@ -38,12 +38,12 @@
                 </Label>
                 <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="21.0" prefWidth="160.0" text="Username:" GridPane.rowIndex="1" />
                 <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="21.0" prefWidth="161.0" text="Password:" GridPane.rowIndex="2" />
-                <TextField fx:id="usernameSign" prefHeight="31.0" prefWidth="0.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                <TextField fx:id="usernameSign" maxWidth="300.0" prefHeight="31.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                     <GridPane.margin>
                         <Insets />
                     </GridPane.margin>
                 </TextField>
-                <PasswordField fx:id="passwordSign" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                <PasswordField fx:id="passwordSign" maxWidth="300.0" prefHeight="31.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                 <Button fx:id="submit" alignment="CENTER" contentDisplay="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#login" prefHeight="66.0" prefWidth="600.0" text="Submit!" textAlignment="CENTER" GridPane.columnSpan="2" GridPane.rowIndex="3" />
             </children>
         </GridPane>

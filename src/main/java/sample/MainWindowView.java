@@ -28,10 +28,10 @@ public class MainWindowView implements Initializable {
     public CheckListView<String> CategoriesCreate;
     public TextArea FirstUpdateCreate;
     public TextField TitleCreate;
-    public TableColumn<Event,String> eventID;
-    public TableColumn<Event,String> Title;
-    public TableColumn<Event,String> publisher;
-    public TableColumn<Event,String> showButtons;
+    public TableColumn<Event, String> eventID;
+    public TableColumn<Event, String> Title;
+    public TableColumn<Event, String> publisher;
+    public TableColumn<Event, String> showButtons;
     public TableView<Event> tableViewEvents;
     public ComboBox eventIDtoUpdate;
     public TextArea newUpdateInformation;
@@ -45,7 +45,7 @@ public class MainWindowView implements Initializable {
     User logged = null;
 
     Controller m;
-//    @FXML
+    //    @FXML
 //    Button btn;
 //    @FXML
 //    Label lbl;
@@ -63,15 +63,15 @@ public class MainWindowView implements Initializable {
 //        lbl.setText("clicked");
         RESULT r = m.login(usernameSign.getText(), passwordSign.getText());
         if (r.toString().equals(RESULT.Success.toString())) {
-            tabPane.getTabs().addAll(AddUpdateTab,ShowEventHistoryTab);
+            tabPane.getTabs().addAll(AddUpdateTab, ShowEventHistoryTab);
             tabPane.getTabs().removeAll(signTab);
             currentUsername = usernameSign.getText();
-            if(m.checkMokdan(usernameSign.getText()).equals(RESULT.Success))
+            if (m.checkMokdan(usernameSign.getText()).equals(RESULT.Success))
                 tabPane.getTabs().add(PublishEventTab);
         } else if (r.toString().equals(RESULT.Fail.toString())) {
-            Alert alert = new Alert(AlertType.ERROR,"username or password does not exist");
+            Alert alert = new Alert(AlertType.ERROR, "username or password does not exist");
             alert.showAndWait();
-        }else {
+        } else {
             throw new Exception("wat");
         }
 
@@ -79,23 +79,23 @@ public class MainWindowView implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        tabPane.getTabs().removeAll(PublishEventTab,AddUpdateTab,ShowEventHistoryTab);
+        tabPane.getTabs().removeAll(PublishEventTab, AddUpdateTab, ShowEventHistoryTab);
         CategoriesCreate.getItems().clear();
         for (String checkedItem : CategoriesCreate.getCheckModel().getCheckedItems()) {
             CategoriesCreate.getItems().remove(checkedItem);
         }
-        CategoriesCreate.getItems().addAll("assault","robbery","fire","car crash");
+        CategoriesCreate.getItems().addAll("assault", "robbery", "fire", "car crash");
         ForcesCreate.getItems().clear();
         for (String checkedItem : ForcesCreate.getCheckModel().getCheckedItems()) {
             ForcesCreate.getItems().remove(checkedItem);
         }
-        ForcesCreate.getItems().addAll("Police","Firefighters","Magen David Adom");
+        ForcesCreate.getItems().addAll("Police", "Firefighters", "Magen David Adom");
 
         tableViewEvents.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         eventID.setCellValueFactory(param -> new SimpleObjectProperty<>(param.getValue().eventID));
         publisher.setCellValueFactory(param -> new SimpleObjectProperty<>(param.getValue().operator));
         Title.setCellValueFactory(param -> new SimpleObjectProperty<>(param.getValue().header));
-        showButtons.setCellFactory(param -> new TableCell<Event,String>(){
+        showButtons.setCellFactory(param -> new TableCell<Event, String>() {
             final Button btn = new Button("show updates");
 
             @Override
@@ -139,12 +139,12 @@ public class MainWindowView implements Initializable {
         TableColumn<Update, String> informationColumn = new TableColumn<>("information");
         informationColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().Information));
 
-        updatesTable.getColumns().addAll(dateColumn,informationColumn);
+        updatesTable.getColumns().addAll(dateColumn, informationColumn);
         return updatesTable;
     }
 
     public void updateEvent(ActionEvent actionEvent) {
-        RESULT r = m.AddUpdate(currentUsername, eventIDtoUpdate.getSelectionModel().getSelectedItem().toString(),newUpdateInformation.getText());
+        RESULT r = m.AddUpdate(currentUsername, eventIDtoUpdate.getSelectionModel().getSelectedItem().toString(), newUpdateInformation.getText());
         if (r.equals(RESULT.Success))
             new Alert(AlertType.CONFIRMATION).showAndWait();
         else
@@ -152,9 +152,9 @@ public class MainWindowView implements Initializable {
     }
 
     public void createEvent(ActionEvent actionEvent) {
-        Object[] categories =  CategoriesCreate.getCheckModel().getCheckedItems().toArray();
-        Object[] forces =  ForcesCreate.getCheckModel().getCheckedItems().toArray();
-        RESULT r = m.AddEvent(currentUsername, TitleCreate.getText(),"in progress",FirstUpdateCreate.getText(),categories,forces,FirstUpdateCreate.getText());
+        Object[] categories = CategoriesCreate.getCheckModel().getCheckedItems().toArray();
+        Object[] forces = ForcesCreate.getCheckModel().getCheckedItems().toArray();
+        RESULT r = m.AddEvent(currentUsername, TitleCreate.getText(), FirstUpdateCreate.getText(), "in progress", categories, forces, FirstUpdateCreate.getText());
         if (r.equals(RESULT.Success))
             new Alert(AlertType.CONFIRMATION).showAndWait();
         else
@@ -163,7 +163,7 @@ public class MainWindowView implements Initializable {
         updateEvenetsOnShow();
     }
 
-    private void updateEvenetsOnShow(){
+    private void updateEvenetsOnShow() {
         ArrayList<Event> events = m.getEvents();
 
         if (tableViewEvents != null) {
