@@ -29,7 +29,7 @@ public class Main extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader();
         Parent root = fxmlLoader.load(this.getClass().getResource("MainWindow.fxml").openStream());
         MainWindowView mwv = fxmlLoader.getController();
-        primaryStage.setTitle("DRE Project");
+        primaryStage.setTitle("Emer-Agency");
         Scene scene = new Scene(root, 600, 400);
         primaryStage.setResizable(false);
         primaryStage.setScene(scene);

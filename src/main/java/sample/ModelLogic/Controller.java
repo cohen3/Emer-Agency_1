@@ -16,7 +16,7 @@ import java.util.HashMap;
 
 public class Controller {
     public static DBHandler dbHandler = null;
-    private Organization organization;
+//    private Organization organization;
 //    private HashMap<String, Event> events;
     private static DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
 

@@ -177,4 +177,7 @@ public class MainWindowView implements Initializable {
                 eventIDtoUpdate.getItems().add(event.eventID);
         }
     }
+
+    public void resetUpdateCreate(ActionEvent actionEvent) {
+    }
 }

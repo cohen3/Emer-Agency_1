@@ -105,7 +105,8 @@
             <children>
                <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="21.0" prefWidth="139.0" text="Title:" />
                <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="21.0" prefWidth="127.0" text="Update Information:" GridPane.rowIndex="1" />
-               <Button fx:id="addUpdate" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#updateEvent" prefHeight="31.0" prefWidth="759.0" text="Create!" GridPane.columnSpan="2" GridPane.rowIndex="2" />
+                <Button fx:id="resetUpdateCreate" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#resetUpdateCreate" prefHeight="31.0" prefWidth="759.0" text="Create!" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                <Button fx:id="addUpdate" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#updateEvent" prefHeight="31.0" prefWidth="759.0" text="Create!" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                <ComboBox fx:id="eventIDtoUpdate" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" />
                <TextArea fx:id="newUpdateInformation" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             </children>
