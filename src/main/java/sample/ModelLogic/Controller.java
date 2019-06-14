@@ -72,10 +72,10 @@ public class Controller {
     public RESULT checkMokdan(String username) {
         ArrayList<Pair> l = new ArrayList<>();
         l.add(new Pair("userID", username));
-        l.add(new Pair("job", "mokdan"));
+        l.add(new Pair("organization", "agent"));
 
-//        return (dbHandler.ReadEntries(l,Tables.Users).size()==1)?RESULT.Success:RESULT.Fail;
-        return RESULT.Success;
+        return (dbHandler.ReadEntries(l,Tables.Users).size()==1)?RESULT.Success:RESULT.Fail;
+//        return RESULT.Success;
     }
 
     public ArrayList<Update> getEventUpdates(String event_name) {

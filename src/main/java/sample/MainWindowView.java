@@ -153,7 +153,22 @@ public class MainWindowView implements Initializable {
 
     public void createEvent(ActionEvent actionEvent) {
         Object[] categories = CategoriesCreate.getCheckModel().getCheckedItems().toArray();
+        if(categories.length==0)
+        {
+            new Alert(AlertType.ERROR,"You must choose at least one category").showAndWait();
+            return;
+        }
         Object[] forces = ForcesCreate.getCheckModel().getCheckedItems().toArray();
+        if(forces.length==0)
+        {
+            new Alert(AlertType.ERROR,"You must choose at least one force").showAndWait();
+            return;
+        }
+        if(TitleCreate.getText()==null || TitleCreate.getText().equals("") || FirstUpdateCreate.getText() == null || FirstUpdateCreate.getText().equals(""))
+        {
+            new Alert(AlertType.ERROR,"You must add title and update text").showAndWait();
+            return;
+        }
         RESULT r = m.AddEvent(currentUsername, TitleCreate.getText(), FirstUpdateCreate.getText(), "in progress", categories, forces, FirstUpdateCreate.getText());
         if (r.equals(RESULT.Success))
             new Alert(AlertType.CONFIRMATION).showAndWait();
