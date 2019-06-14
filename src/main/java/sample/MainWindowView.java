@@ -44,12 +44,12 @@ public class MainWindowView implements Initializable {
 
     User logged = null;
 
-    Controller m;
+    private Controller m;
     //    @FXML
 //    Button btn;
 //    @FXML
 //    Label lbl;
-    String currentUsername = "guest";
+    private String currentUsername = "guest";
 
     public void setModel(Controller m) {
         this.m = m;
@@ -59,7 +59,7 @@ public class MainWindowView implements Initializable {
             eventIDtoUpdate.getItems().add(event.eventID);
     }
 
-    public void login(ActionEvent actionEvent) throws Exception {
+    public void login() throws Exception {
 //        lbl.setText("clicked");
         RESULT r = m.login(usernameSign.getText(), passwordSign.getText());
         if (r.toString().equals(RESULT.Success.toString())) {
@@ -143,12 +143,24 @@ public class MainWindowView implements Initializable {
         return updatesTable;
     }
 
-    public void updateEvent(ActionEvent actionEvent) {
+    public void updateEvent() {
+        if (eventIDtoUpdate.getValue()==null)
+        {
+            new Alert(AlertType.ERROR,"You must choose event").showAndWait();
+            return;
+        }
+        if (newUpdateInformation.getText().equals(""))
+        {
+            new Alert(AlertType.ERROR,"You must insert information").showAndWait();
+            return;
+        }
+
         RESULT r = m.AddUpdate(currentUsername, eventIDtoUpdate.getSelectionModel().getSelectedItem().toString(), newUpdateInformation.getText());
         if (r.equals(RESULT.Success))
-            new Alert(AlertType.CONFIRMATION).showAndWait();
+            new Alert(AlertType.INFORMATION,"success").showAndWait();
         else
-            new Alert(AlertType.ERROR).showAndWait();
+            new Alert(AlertType.ERROR,"db error").showAndWait();
+        resetUpdateCreate();
     }
 
     public void createEvent(ActionEvent actionEvent) {
@@ -171,11 +183,12 @@ public class MainWindowView implements Initializable {
         }
         RESULT r = m.AddEvent(currentUsername, TitleCreate.getText(), FirstUpdateCreate.getText(), "in progress", categories, forces, FirstUpdateCreate.getText());
         if (r.equals(RESULT.Success))
-            new Alert(AlertType.CONFIRMATION).showAndWait();
+            new Alert(AlertType.INFORMATION,"success").showAndWait();
         else
-            new Alert(AlertType.ERROR).showAndWait();
+            new Alert(AlertType.ERROR,"db error").showAndWait();
 //        CategoriesCreate.getCheckModel().getItem(0)
         updateEvenetsOnShow();
+        resetEventCreate();
     }
 
     private void updateEvenetsOnShow() {
@@ -193,6 +206,18 @@ public class MainWindowView implements Initializable {
         }
     }
 
-    public void resetUpdateCreate(ActionEvent actionEvent) {
+    public void resetUpdateCreate() {
+        newUpdateInformation.clear();
+//        eventIDtoUpdate.getSelectionModel().clearSelection();//TODO: Check
+        eventIDtoUpdate.setValue(null);
+
+    }
+
+    public void resetEventCreate() {
+        TitleCreate.clear();
+        FirstUpdateCreate.clear();
+        ForcesCreate.getCheckModel().clearChecks();
+        CategoriesCreate.getCheckModel().clearChecks();
+        TitleCreate.clear();
     }
 }
