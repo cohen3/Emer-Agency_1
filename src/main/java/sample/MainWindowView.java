@@ -14,10 +14,7 @@ import sample.Enums.RESULT;
 import sample.ModelLogic.*;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class MainWindowView implements Initializable {
     public TextField usernameSign;
@@ -62,7 +59,7 @@ public class MainWindowView implements Initializable {
             eventIDtoUpdate.getItems().add(event.eventID);
     }
 
-    public void onClickEvent(ActionEvent actionEvent) throws Exception {
+    public void login(ActionEvent actionEvent) throws Exception {
 //        lbl.setText("clicked");
         RESULT r = m.login(usernameSign.getText(), passwordSign.getText());
         if (r.toString().equals(RESULT.Success.toString())) {
@@ -72,7 +69,6 @@ public class MainWindowView implements Initializable {
             if(m.checkMokdan(usernameSign.getText()).equals(RESULT.Success))
                 tabPane.getTabs().add(PublishEventTab);
         } else if (r.toString().equals(RESULT.Fail.toString())) {
-            Alert.AlertType alertAlertType;
             Alert alert = new Alert(AlertType.ERROR,"username or password does not exist");
             alert.showAndWait();
         }else {
@@ -148,11 +144,22 @@ public class MainWindowView implements Initializable {
     }
 
     public void updateEvent(ActionEvent actionEvent) {
-        m.AddUpdate(currentUsername, eventIDtoUpdate.getSelectionModel().getSelectedItem().toString(),newUpdateInformation.getText());
+        RESULT r = m.AddUpdate(currentUsername, eventIDtoUpdate.getSelectionModel().getSelectedItem().toString(),newUpdateInformation.getText());
+        if (r.equals(RESULT.Success))
+            new Alert(AlertType.CONFIRMATION).showAndWait();
+        else
+            new Alert(AlertType.ERROR).showAndWait();
     }
 
     public void createEvent(ActionEvent actionEvent) {
-        m.AddEvent(currentUsername, TitleCreate.getText(),CategoriesCreate.getCheckModel().getItem(0),"in progress",FirstUpdateCreate.getText());
+        Object[] categories =  CategoriesCreate.getCheckModel().getCheckedItems().toArray();
+        Object[] forces =  ForcesCreate.getCheckModel().getCheckedItems().toArray();
+        RESULT r = m.AddEvent(currentUsername, TitleCreate.getText(),"in progress",FirstUpdateCreate.getText(),categories,forces,FirstUpdateCreate.getText());
+        if (r.equals(RESULT.Success))
+            new Alert(AlertType.CONFIRMATION).showAndWait();
+        else
+            new Alert(AlertType.ERROR).showAndWait();
+//        CategoriesCreate.getCheckModel().getItem(0)
         updateEvenetsOnShow();
     }
 

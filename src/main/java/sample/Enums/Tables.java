@@ -4,5 +4,6 @@ public enum Tables {
     Users,
     UserUpdates,
     Events,
-    EventCategory
+    EventCategory,
+    EventForces
 }

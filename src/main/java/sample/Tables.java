@@ -1,5 +1,5 @@
 package sample;
 
 public enum Tables {
-    Events,Users,UserUpdates
+    Events,Users,UserUpdates,EventCategory,EventForces,sqlite_master
 }
