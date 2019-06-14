@@ -31,10 +31,15 @@ public class MainWindowView implements Initializable {
     public TableColumn<Event, String> eventID;
     public TableColumn<Event, String> Title;
     public TableColumn<Event, String> publisher;
+    public TableColumn<Event, String> status;
+    public TableColumn<Event, String> date;
     public TableColumn<Event, String> showButtons;
+    public TableColumn<Event, String> forces;
+    public TableColumn<Event, String> categories;
     public TableView<Event> tableViewEvents;
     public ComboBox eventIDtoUpdate;
     public TextArea newUpdateInformation;
+
 
     // Usecases we will implement:
     //
@@ -50,13 +55,15 @@ public class MainWindowView implements Initializable {
 //    @FXML
 //    Label lbl;
     private String currentUsername = "guest";
+    private String currentForce = "";
+
 
     public void setModel(Controller m) {
         this.m = m;
-        ArrayList<Event> events = m.getEvents();
-        tableViewEvents.getItems().addAll(events);
-        for (Event event : events)
-            eventIDtoUpdate.getItems().add(event.eventID);
+//        ArrayList<Event> events = m.getEvents();
+//        tableViewEvents.getItems().addAll(events);
+//        for (Event event : events)
+//            eventIDtoUpdate.getItems().add(event.eventID);
     }
 
     public void login() throws Exception {
@@ -66,8 +73,10 @@ public class MainWindowView implements Initializable {
             tabPane.getTabs().addAll(AddUpdateTab, ShowEventHistoryTab);
             tabPane.getTabs().removeAll(signTab);
             currentUsername = usernameSign.getText();
+            currentForce = m.returnForce(currentUsername);
             if (m.checkMokdan(usernameSign.getText()).equals(RESULT.Success))
                 tabPane.getTabs().add(PublishEventTab);
+            updateEvenetsOnShow();
         } else if (r.toString().equals(RESULT.Fail.toString())) {
             Alert alert = new Alert(AlertType.ERROR, "username or password does not exist");
             alert.showAndWait();
@@ -95,6 +104,11 @@ public class MainWindowView implements Initializable {
         eventID.setCellValueFactory(param -> new SimpleObjectProperty<>(param.getValue().eventID));
         publisher.setCellValueFactory(param -> new SimpleObjectProperty<>(param.getValue().operator));
         Title.setCellValueFactory(param -> new SimpleObjectProperty<>(param.getValue().header));
+        status.setCellValueFactory(param -> new SimpleObjectProperty<>(param.getValue().Status));
+        date.setCellValueFactory(param -> new SimpleObjectProperty<>(param.getValue().date));
+        forces.setCellValueFactory(param -> new SimpleObjectProperty<>(Arrays.toString(param.getValue().forces.toArray()).replaceAll("[]\\[]", "")));
+        categories.setCellValueFactory(param -> new SimpleObjectProperty<>(Arrays.toString(param.getValue().categories.toArray()).replaceAll("[]\\[]", "")));
+        date.setCellValueFactory(param -> new SimpleObjectProperty<>(param.getValue().date));
         showButtons.setCellFactory(param -> new TableCell<Event, String>() {
             final Button btn = new Button("show updates");
 
@@ -125,6 +139,8 @@ public class MainWindowView implements Initializable {
                 }
             }
         });
+//        forces;
+//        categories;
 
 //        tableViewEvents.getItems().addAll(m.getEvents());
     }
@@ -144,48 +160,43 @@ public class MainWindowView implements Initializable {
     }
 
     public void updateEvent() {
-        if (eventIDtoUpdate.getValue()==null)
-        {
-            new Alert(AlertType.ERROR,"You must choose event").showAndWait();
+        if (eventIDtoUpdate.getValue() == null) {
+            new Alert(AlertType.ERROR, "You must choose event").showAndWait();
             return;
         }
-        if (newUpdateInformation.getText().equals(""))
-        {
-            new Alert(AlertType.ERROR,"You must insert information").showAndWait();
+        if (newUpdateInformation.getText().equals("")) {
+            new Alert(AlertType.ERROR, "You must insert information").showAndWait();
             return;
         }
 
         RESULT r = m.AddUpdate(currentUsername, eventIDtoUpdate.getSelectionModel().getSelectedItem().toString(), newUpdateInformation.getText());
         if (r.equals(RESULT.Success))
-            new Alert(AlertType.INFORMATION,"success").showAndWait();
+            new Alert(AlertType.INFORMATION, "success").showAndWait();
         else
-            new Alert(AlertType.ERROR,"db error").showAndWait();
+            new Alert(AlertType.ERROR, "db error").showAndWait();
         resetUpdateCreate();
     }
 
     public void createEvent(ActionEvent actionEvent) {
         Object[] categories = CategoriesCreate.getCheckModel().getCheckedItems().toArray();
-        if(categories.length==0)
-        {
-            new Alert(AlertType.ERROR,"You must choose at least one category").showAndWait();
+        if (categories.length == 0) {
+            new Alert(AlertType.ERROR, "You must choose at least one category").showAndWait();
             return;
         }
         Object[] forces = ForcesCreate.getCheckModel().getCheckedItems().toArray();
-        if(forces.length==0)
-        {
-            new Alert(AlertType.ERROR,"You must choose at least one force").showAndWait();
+        if (forces.length == 0) {
+            new Alert(AlertType.ERROR, "You must choose at least one force").showAndWait();
             return;
         }
-        if(TitleCreate.getText()==null || TitleCreate.getText().equals("") || FirstUpdateCreate.getText() == null || FirstUpdateCreate.getText().equals(""))
-        {
-            new Alert(AlertType.ERROR,"You must add title and update text").showAndWait();
+        if (TitleCreate.getText() == null || TitleCreate.getText().equals("") || FirstUpdateCreate.getText() == null || FirstUpdateCreate.getText().equals("")) {
+            new Alert(AlertType.ERROR, "You must add title and update text").showAndWait();
             return;
         }
         RESULT r = m.AddEvent(currentUsername, TitleCreate.getText(), FirstUpdateCreate.getText(), "in progress", categories, forces, FirstUpdateCreate.getText());
         if (r.equals(RESULT.Success))
-            new Alert(AlertType.INFORMATION,"success").showAndWait();
+            new Alert(AlertType.INFORMATION, "success").showAndWait();
         else
-            new Alert(AlertType.ERROR,"db error").showAndWait();
+            new Alert(AlertType.ERROR, "db error").showAndWait();
 //        CategoriesCreate.getCheckModel().getItem(0)
         updateEvenetsOnShow();
         resetEventCreate();
@@ -193,6 +204,7 @@ public class MainWindowView implements Initializable {
 
     private void updateEvenetsOnShow() {
         ArrayList<Event> events = m.getEvents();
+        events.removeIf(s -> !currentForce.equals("agent") && !s.forces.contains(currentForce));
 
         if (tableViewEvents != null) {
             if (tableViewEvents.getItems() != null) tableViewEvents.getItems().clear();
@@ -208,7 +220,6 @@ public class MainWindowView implements Initializable {
 
     public void resetUpdateCreate() {
         newUpdateInformation.clear();
-//        eventIDtoUpdate.getSelectionModel().clearSelection();//TODO: Check
         eventIDtoUpdate.setValue(null);
 
     }

@@ -16,7 +16,7 @@ import java.util.HashMap;
 
 public class Controller {
     public static DBHandler dbHandler = null;
-//    private Organization organization;
+    //    private Organization organization;
 //    private HashMap<String, Event> events;
     private static DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
 
@@ -74,8 +74,15 @@ public class Controller {
         l.add(new Pair("userID", username));
         l.add(new Pair("organization", "agent"));
 
-        return (dbHandler.ReadEntries(l,Tables.Users).size()==1)?RESULT.Success:RESULT.Fail;
-//        return RESULT.Success;
+        return (dbHandler.ReadEntries(l, Tables.Users).size() == 1) ? RESULT.Success : RESULT.Fail;
+    }
+
+    public String returnForce(String username) {
+        ArrayList<Pair> l = new ArrayList<>();
+        l.add(new Pair("userID", username));
+//        l.add(new Pair("organization", "agent"));
+
+        return (dbHandler.ReadEntries(l, Tables.Users).get(0).get("organization")) ;
     }
 
     public ArrayList<Update> getEventUpdates(String event_name) {
@@ -93,7 +100,23 @@ public class Controller {
         ArrayList<Pair> l = new ArrayList<>();
         ArrayList<Event> events = new ArrayList<>();
         for (HashMap<String, String> element : dbHandler.ReadEntries(l, Tables.Events)) {
-            Event event = new Event(element.get("eventID"), element.get("date"), element.get("information"), element.get("status"), element.get("UserID"));
+            ArrayList<Pair> l2 = new ArrayList<>();
+            l2.add(new Pair("eventID", element.get("eventID")));
+
+            ArrayList<HashMap<String, String>> Acategories = dbHandler.ReadEntries(l2, Tables.EventCategory);
+            ArrayList<HashMap<String, String>> Aforces = dbHandler.ReadEntries(l2, Tables.EventForces);
+
+            ArrayList<Object> categories = new ArrayList<>();
+            ArrayList<Object> forces = new ArrayList<>();
+
+            for (HashMap<String, String> element2 : Acategories) {
+                categories.add(element2.get("category"));
+            }
+            for (HashMap<String, String> element2 : Aforces) {
+                forces.add(element2.get("force"));
+            }
+
+            Event event = new Event(element.get("eventID"), element.get("date"), element.get("information"), element.get("status"), element.get("UserID"),forces,categories);
             events.add(event);
         }
         return events;
@@ -121,24 +144,22 @@ public class Controller {
         l.add(new Pair("date", dtf.format(LocalDateTime.now())));
 
         RESULT r;
-        if( (r = dbHandler.AddEntry(l, Tables.Events)).equals(RESULT.Success))
-        {
+        if ((r = dbHandler.AddEntry(l, Tables.Events)).equals(RESULT.Success)) {
 
-            for (Object category:categories) {
+            for (Object category : categories) {
                 l.clear();
-                l.add(new Pair("category",category.toString()));
-                l.add(new Pair("eventID",eventID));
-                dbHandler.AddEntry(l,Tables.EventCategory);
+                l.add(new Pair("category", category.toString()));
+                l.add(new Pair("eventID", eventID));
+                dbHandler.AddEntry(l, Tables.EventCategory);
             }
 
-            for (Object force:forces)
-            {
+            for (Object force : forces) {
                 l.clear();
-                l.add(new Pair("force",force.toString()));
-                l.add(new Pair("eventID",eventID));
-                dbHandler.AddEntry(l,Tables.EventForces);
+                l.add(new Pair("force", force.toString()));
+                l.add(new Pair("eventID", eventID));
+                dbHandler.AddEntry(l, Tables.EventForces);
             }
-            AddUpdate(userID,eventID,firstupdateinformation);
+            AddUpdate(userID, eventID, firstupdateinformation);
         }
 
 

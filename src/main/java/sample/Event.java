@@ -14,10 +14,13 @@ public class Event {
     String header;
     String Status;
     String operator;
+    ArrayList<Object> forces;
+    ArrayList<Object> categories;
+
     LinkedList<Update> updates;
     LinkedList<User> securityPerson;
 
-    public Event(String eventID,String date, String header, String status, String operator) {
+    public Event(String eventID, String date, String header, String status, String operator, ArrayList<Object> forces, ArrayList<Object> categories) {
         this.eventID = eventID;
         this.date = date;
         this.header = header;
@@ -25,28 +28,27 @@ public class Event {
         this.operator = operator;
         updates = new LinkedList<>();
         securityPerson = new LinkedList<>();
+        this.forces = forces;
+        this.categories = categories;
     }
 
-    public Update getLastUpdate()
-    {
+    public Update getLastUpdate() {
         return updates.getLast();
     }
 
-    public void addUpdate(Update u)
-    {
+    public void addUpdate(Update u) {
         updates.addLast(u);
     }
 
-    public void addUpdates(LinkedList<Update> u)
-    {updates=u;}
+    public void addUpdates(LinkedList<Update> u) {
+        updates = u;
+    }
 
-    public LinkedList<Update> getAllUpdates()
-    {
+    public LinkedList<Update> getAllUpdates() {
         return updates;
     }
 
-    public LinkedList<User> getAllSecurity()
-    {
+    public LinkedList<User> getAllSecurity() {
         return securityPerson;
     }
 
@@ -67,7 +69,7 @@ public class Event {
     }
 
     public LinkedList<Update> getSortedUpdates() {
-        LinkedList<Update> u =updates;
+        LinkedList<Update> u = updates;
         String new1 = u.get(0).date;
         DateFormat format = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.ENGLISH);
         Date date = null;
@@ -86,7 +88,6 @@ public class Event {
         Collections.reverse(u);
         return u;
     }
-
 
 
 }
