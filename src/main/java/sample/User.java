@@ -1,5 +1,7 @@
 package sample;
 
+import java.util.HashMap;
+
 public class User {
     String ID;
     String Rank;
@@ -7,6 +9,7 @@ public class User {
     String Status;
     String UserName;
     String Password;
+    HashMap<String, Event> events;
 
     public User(String ID, String rank, String warning, String status, String userName, String password) {
         this.ID = ID;
@@ -15,6 +18,7 @@ public class User {
         Status = status;
         UserName = userName;
         Password = password;
+        events = new HashMap<>();
     }
 
     public void setID(String ID) {
@@ -63,5 +67,18 @@ public class User {
 
     public String getPassword() {
         return Password;
+    }
+
+    public void AddEvent(Event e)
+    {
+        if(e.getUser_ID().equals(this.ID))
+            events.put(e.getEventID(), e);
+    }
+
+    public Event getEvent(String id){return events.get(id);}
+
+    public Object[] getEvents()
+    {
+        return events.values().toArray();
     }
 }

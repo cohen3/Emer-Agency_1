@@ -13,5 +13,6 @@ public enum Fields {
     password,
     rank,
     warning,
-
+    organization,
+    kind
 }

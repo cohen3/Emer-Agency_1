@@ -3,8 +3,6 @@ package sample;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 
@@ -31,6 +29,8 @@ public class Event {
         this.forces = forces;
         this.categories = categories;
     }
+
+    public String getEventID(){return this.eventID;}
 
     public Update getLastUpdate() {
         return updates.getLast();

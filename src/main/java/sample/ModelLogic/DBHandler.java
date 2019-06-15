@@ -12,7 +12,9 @@ import java.util.HashMap;
 public class DBHandler {
 
     private Connection connection;
-
+    private static DBHandler db = new DBHandler();
+    public static DBHandler getInstance() {return db;}
+    private DBHandler(){}
 
     public void connectDB(String db_name) {
 

@@ -1,32 +1,35 @@
 package sample.ModelLogic;
 
 import javafx.util.Pair;
-//import sample.Enums.Fields;
+import sample.*;
+import sample.Enums.Fields;
 import sample.Enums.RESULT;
 import sample.Enums.Tables;
-import sample.Event;
-import sample.Organization;
-import sample.Update;
-import sample.User;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+//import sample.Enums.Fields;
+
 public class Controller {
     public static DBHandler dbHandler = null;
+    HashMap<String, Organization> organizations;
+    User currentLogged;
     //    private Organization organization;
 //    private HashMap<String, Event> events;
     private static DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
 
     public Controller(String path) {
-        dbHandler = new DBHandler();
+        dbHandler = DBHandler.getInstance();
         dbHandler.connectDB(path);
+        organizations = AOrganizationListFactory.generateList();
+
 //        Pair p = new Pair(Fields.status, "active");
 //        ArrayList<Pair> a = new ArrayList<>();
 //        a.add(p);
-//        ArrayList<HashMap<String, String>> results = ReadEntries(a, Tables.Users);
+//        ArrayList<HashMap<String, String>> results = dbHandler.ReadEntries(a, Tables.Users);
 //        User admin;
 //        if (results.size() < 1) admin = new User("1", "10", "0", "active", "EladC", "1234");
 //        else {
@@ -38,7 +41,7 @@ public class Controller {
 //                    res.get(Fields.Username.name()),
 //                    res.get(Fields.password.name()));
 //        }
-//        this.organization = new Organization(admin);
+//        this.organizations.put("o1", new Organization(admin, "o1"));
 
     }
 
@@ -64,8 +67,16 @@ public class Controller {
         l.add(new Pair("userID", username));
         l.add(new Pair("password", password));
 
+        ArrayList<HashMap<String, String>> results = dbHandler.ReadEntries(l, Tables.Users);
+        HashMap<String, String> r = results.get(0);
 
-        return (dbHandler.ReadEntries(l, Tables.Users).size() == 1) ? RESULT.Success : RESULT.Fail;
+        String n = r.get(Fields.organization.name());
+        Organization o = organizations.get(n);
+        if(!o.checkUser(results.get(0).get(Fields.userID)))
+        {
+            currentLogged = o.AddUser(results.get(0));
+        }
+        return (results.size() == 1) ? RESULT.Success : RESULT.Fail;
 //        return RESULT.Success;
     }
 
@@ -129,7 +140,31 @@ public class Controller {
         l.add(new Pair("information", information));
         l.add(new Pair("userID", userID));
         l.add(new Pair("date", dtf.format(LocalDateTime.now())));
+        if(currentLogged.getEvent(eventID) == null){
+            ArrayList<Pair> l1 = new ArrayList<>();
+            l.add(new Pair("eventID", eventID));
+            ArrayList<HashMap<String, String>> results = dbHandler.ReadEntries(l1,Tables.Events);
+            HashMap<String, String> h = results.get(0);
+            ArrayList<Pair> l3 = new ArrayList<>();
+            l3.add(new Pair("eventID", eventID));
 
+            ArrayList<HashMap<String, String>> Acategories1 = dbHandler.ReadEntries(l3, Tables.EventCategory);
+            ArrayList<HashMap<String, String>> Aforces1 = dbHandler.ReadEntries(l3, Tables.EventForces);
+
+            ArrayList<Object> categories = new ArrayList<>();
+            ArrayList<Object> forces = new ArrayList<>();
+
+            for (HashMap<String, String> element2 : Acategories1) {
+                categories.add(element2.get("category"));
+            }
+            for (HashMap<String, String> element2 : Aforces1) {
+                forces.add(element2.get("force"));
+            }
+            Event e = new Event(eventID,h.get(Fields.date.name()),
+                    "",Fields.status.name(),userID,forces,categories);
+            currentLogged.AddEvent(e);
+        }
+        currentLogged.getEvent(eventID).addUpdate(new Update(information, dtf.format(LocalDateTime.now())));
         return dbHandler.AddEntry(l, Tables.UserUpdates);
     }
 
@@ -142,6 +177,8 @@ public class Controller {
 //        l.add(new Pair("category", category));
         l.add(new Pair("status", status));
         l.add(new Pair("date", dtf.format(LocalDateTime.now())));
+        ArrayList<Object> cats = new ArrayList<>();
+        ArrayList<Object> fs = new ArrayList<>();
 
         RESULT r;
         if ((r = dbHandler.AddEntry(l, Tables.Events)).equals(RESULT.Success)) {
@@ -151,6 +188,7 @@ public class Controller {
                 l.add(new Pair("category", category.toString()));
                 l.add(new Pair("eventID", eventID));
                 dbHandler.AddEntry(l, Tables.EventCategory);
+                cats.add(category);
             }
 
             for (Object force : forces) {
@@ -158,10 +196,13 @@ public class Controller {
                 l.add(new Pair("force", force.toString()));
                 l.add(new Pair("eventID", eventID));
                 dbHandler.AddEntry(l, Tables.EventForces);
+                fs.add(force);
             }
             AddUpdate(userID, eventID, firstupdateinformation);
+            Event e = new Event(eventID,dtf.format(LocalDateTime.now()),
+                    "",status,userID,fs,cats);
+            currentLogged.AddEvent(e);
         }
-
 
         return r;
     }
