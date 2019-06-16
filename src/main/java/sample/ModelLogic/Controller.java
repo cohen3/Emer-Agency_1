@@ -68,8 +68,8 @@ public class Controller {
         l.add(new Pair("password", password));
 
         ArrayList<HashMap<String, String>> results = dbHandler.ReadEntries(l, Tables.Users);
-        HashMap<String, String> r = results.get(0);
-
+        if(results.size()==0){ return RESULT.Fail;}
+        HashMap<String, String>  r = results.get(0);
         String n = r.get(Fields.organization.name());
         Organization o = organizations.get(n);
         if(!o.checkUser(results.get(0).get(Fields.userID)))
